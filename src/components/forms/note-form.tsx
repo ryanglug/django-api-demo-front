@@ -36,16 +36,12 @@ const NoteForm = () => {
   const accessToken = useAuthStore((state) => state.accessToken);
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
-    console.log(values);
-
     try {
       if (!accessToken) return;
-      const res = await tokenApi(accessToken).post("note/", values);
+      await tokenApi(accessToken).post("note/", values);
 
-      console.log(res.data);
-
-      alert("Successfully created note!");
       queryClient.invalidateQueries({ queryKey: ["users-notes"] });
+      alert("Successfully created note!");
       reset();
     } catch (error) {
       alert("Failed to create note!");

@@ -1,6 +1,6 @@
 import { tokenApi } from "@/lib/api";
 import type { NoteType } from "@/types/api-types";
-import { useInfiniteQuery } from "@tanstack/react-query";
+import { useInfiniteQuery, useQueryClient } from "@tanstack/react-query";
 import Note from "./note";
 import ScrollContainer from "./scroll-container";
 import { useAuthStore } from "@/stores/auth-store";
@@ -31,6 +31,7 @@ const DjangoAuth = () => {
     isLoading,
     error,
     isFetchingNextPage,
+    refetch,
   } = useInfiniteQuery({
     queryKey: ["users-notes"],
     queryFn: ({ pageParam }) => getNotes(accessToken!, { pageParam }),
@@ -39,10 +40,21 @@ const DjangoAuth = () => {
     getNextPageParam: (lastPage) => lastPage.nextPage,
   });
 
+  const deleteNote = async (id: string) => {
+    if (!accessToken) return;
+    try {
+      await tokenApi(accessToken).delete(`note/delete/${id}/`);
+
+      refetch();
+      alert("Deleted note successfully");
+    } catch (error) {
+      console.error(error);
+      alert("Failed to delete note");
+    }
+  };
+
   if (isLoading) return <div className="text-5xl">Loading...</div>;
   if (error) return <div className="text-5xl">{error.message}</div>;
-
-  // console.log(data?.pages);
 
   return (
     <div className="flex flex-col gap-4">
@@ -55,7 +67,12 @@ const DjangoAuth = () => {
         {data &&
           data.pages.map((page) =>
             page.results.map((note, i) => (
-              <Note key={`note-result-${i}`} note={note} />
+              <Note
+                key={`note-result-${i}`}
+                note={note}
+                canDelete
+                handleDelete={deleteNote}
+              />
             ))
           )}
       </ScrollContainer>

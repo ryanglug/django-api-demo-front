@@ -36,8 +36,6 @@ const DjangoNoAuth = () => {
   if (isLoading) return <div className="text-5xl">Loading...</div>;
   if (error) return <div className="text-5xl">{error.message}</div>;
 
-  console.log(data?.pages);
-
   return (
     <div className="flex flex-col gap-4">
       <h2>All Paginated Notes:</h2>

@@ -4,7 +4,10 @@ query GetNotes ($page : Int) {
     id
     title
     content
-    createdAt
+    author {
+      id
+      username
+    }
   }
 }
 `;

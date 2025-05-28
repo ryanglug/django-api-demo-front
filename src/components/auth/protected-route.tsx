@@ -17,7 +17,7 @@ const ProtectedRoute = ({ children }: Props) => {
 
   useEffect(() => {
     authenticate();
-  }, []);
+  }, [accessToken]);
 
   const refreshToken = async () => {
     try {
@@ -25,8 +25,12 @@ const ProtectedRoute = ({ children }: Props) => {
 
       const token = res.data.access;
 
-      refreshUser(token);
-      setAuthenticated(true);
+      if (!token) {
+        setAuthenticated(false);
+      } else {
+        refreshUser(token);
+        setAuthenticated(true);
+      }
     } catch (error) {
       console.error(error);
       setAuthenticated(false);

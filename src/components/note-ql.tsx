@@ -12,6 +12,7 @@ const NoteQL = ({ note }: Props) => {
         <h3>{note.title}</h3>
         <p>{note.content}</p>
         <span>{formatDate(note.createdAt)}</span>
+        <span>Created by: {note.author.username}</span>
       </div>
     </div>
   );

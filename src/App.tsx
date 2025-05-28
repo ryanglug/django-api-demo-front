@@ -6,6 +6,7 @@ import LoginPage from "./pages/login-page";
 import RegisterPage from "./pages/register-page";
 import SignedInPage from "./pages/signed-in";
 import ProtectedRoute from "./components/auth/protected-route";
+import Logout from "./pages/logout";
 
 function App() {
   return (
@@ -20,6 +21,14 @@ function App() {
           element={
             <ProtectedRoute>
               <SignedInPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/logout"
+          element={
+            <ProtectedRoute>
+              <Logout />
             </ProtectedRoute>
           }
         />

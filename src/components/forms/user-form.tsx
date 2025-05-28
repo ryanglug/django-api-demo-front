@@ -48,7 +48,6 @@ const UserForm = ({ isLogin = true }: Props) => {
   const buttonContent = isLogin ? "register" : "login";
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
-    console.log(values);
     if (isLogin) {
       try {
         const res = await authApi.post("login/", values);
@@ -63,7 +62,6 @@ const UserForm = ({ isLogin = true }: Props) => {
       }
     } else {
       try {
-        console.log(values);
         await apiGeneric.post("user/create/", values);
 
         alert("User created successfully!");
