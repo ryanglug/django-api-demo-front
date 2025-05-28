@@ -1,4 +1,5 @@
 import DjangoAuth from "@/components/django-auth";
+import DjangoAuthGraphQL from "@/components/django-auth-graphql";
 import NoteForm from "@/components/forms/note-form";
 import ImageMap from "@/components/image-map";
 import {
@@ -20,6 +21,10 @@ const SignedInPage = () => {
           <DjangoAuth />
         </div>
         <NoteForm />
+        <div className="flex items-center gap-2 justify-self-end mr-20 self-start">
+          <ImageMap array={DJANGO_REACT_GRAPHQL} />
+        </div>
+        <DjangoAuthGraphQL />
       </div>
     </section>
   );

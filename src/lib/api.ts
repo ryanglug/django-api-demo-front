@@ -25,3 +25,12 @@ export const tokenApi = (accessToken: string) => {
   });
   return axiosInstance;
 };
+export const graphQLTokenApi = (accessToken: string) => {
+  const axiosInstance = axios.create({
+    baseURL: `${import.meta.env.VITE_API_URL}/graphql/`,
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+    },
+  });
+  return axiosInstance;
+};

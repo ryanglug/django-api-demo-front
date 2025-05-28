@@ -33,15 +33,15 @@ const Navbar = () => {
 
   return (
     <div className="absolute top-0 inset-x-0 bg-gray-500/10 w-full h-16 px-10 py-3 flex items-center">
+      <NavLink
+        to="/"
+        className="text-white bg-orange-400/20 inline-flex p-2 rounded-lg hover:cursor-pointer hover:bg-orange-400/30 transition font-medium mr-4"
+      >
+        Home
+      </NavLink>
       {userInfo ? (
         <div className="flex items-center gap-4">
           <p>Hello {userInfo.username}</p>
-          <NavLink
-            to="/"
-            className="text-white bg-orange-400/20 inline-flex p-2 rounded-lg hover:cursor-pointer hover:bg-orange-400/30 transition font-medium"
-          >
-            Home
-          </NavLink>
           <NavLink
             to="/signed-in"
             className="text-white bg-orange-400/20 inline-flex p-2 rounded-lg hover:cursor-pointer hover:bg-orange-400/30 transition font-medium"
