@@ -75,7 +75,6 @@ const UserForm = ({ isLogin = true }: Props) => {
 
   return (
     <div className="capitalize">
-      <h2 className="text-center mb-14 text-5xl">{textContent}</h2>
       <form
         onSubmit={handleSubmit(onSubmit)}
         className="flex flex-col gap-7 form-class"

@@ -1,3 +1,4 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap");
 @import "tailwindcss";
 
 :root,
@@ -5,4 +6,27 @@ html,
 body {
   background-color: black;
   color: white;
+  font-family: "Poppins", sans-serif;
+}
+
+/* Width of the scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+/* Background of the scrollbar track */
+::-webkit-scrollbar-track {
+  background: #0c030b;
+  border-radius: 4px;
+}
+
+/* Scrollbar thumb */
+::-webkit-scrollbar-thumb {
+  background: #393939;
+  border-radius: 20px;
+}
+
+/* Scrollbar thumb on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
 }

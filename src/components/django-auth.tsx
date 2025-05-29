@@ -31,7 +31,6 @@ const DjangoAuth = () => {
     isLoading,
     error,
     isFetchingNextPage,
-    refetch,
   } = useInfiniteQuery({
     queryKey: ["users-notes"],
     queryFn: ({ pageParam }) => getNotes(accessToken!, { pageParam }),
@@ -40,12 +39,19 @@ const DjangoAuth = () => {
     getNextPageParam: (lastPage) => lastPage.nextPage,
   });
 
+  const queryClient = useQueryClient();
+
   const deleteNote = async (id: string) => {
     if (!accessToken) return;
     try {
       await tokenApi(accessToken).delete(`note/delete/${id}/`);
 
-      refetch();
+      queryClient.invalidateQueries({
+        queryKey: ["users-notes"],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ["auth-graphql-notes"],
+      });
       alert("Deleted note successfully");
     } catch (error) {
       console.error(error);
@@ -58,9 +64,8 @@ const DjangoAuth = () => {
 
   return (
     <div className="flex flex-col gap-4">
-      <h2>All Paginated Notes:</h2>
       <ScrollContainer
-        className="flex flex-col gap-5 items-center h-[400px] overflow-y-scroll pr-10"
+        className="flex flex-col gap-5 items-center h-[500px] overflow-y-scroll pr-5"
         callback={fetchNextPage}
         shouldCallback={!isFetchingNextPage && hasNextPage}
       >
@@ -70,7 +75,7 @@ const DjangoAuth = () => {
               <Note
                 key={`note-result-${i}`}
                 note={note}
-                canDelete
+                isAuth
                 handleDelete={deleteNote}
               />
             ))

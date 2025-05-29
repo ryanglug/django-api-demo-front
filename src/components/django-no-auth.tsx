@@ -37,10 +37,9 @@ const DjangoNoAuth = () => {
   if (error) return <div className="text-5xl">{error.message}</div>;
 
   return (
-    <div className="flex flex-col gap-4">
-      <h2>All Paginated Notes:</h2>
+    <div className="flex flex-col">
       <ScrollContainer
-        className="flex flex-col gap-5 items-center h-[400px] overflow-y-scroll pr-10"
+        className="flex flex-col gap-4 items-center h-[600px] overflow-y-scroll pr-5"
         callback={fetchNextPage}
         shouldCallback={!isFetchingNextPage && hasNextPage}
       >
@@ -52,7 +51,11 @@ const DjangoNoAuth = () => {
           )}
       </ScrollContainer>
 
-      {!hasNextPage && <div>No more notes to fetch...</div>}
+      {!hasNextPage && (
+        <div className="font-medium mt-5 text-xl">
+          No more notes to fetch...
+        </div>
+      )}
     </div>
   );
 };

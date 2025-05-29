@@ -1,8 +1,13 @@
+import {
+  NAVBAR_PROTECTED_ROUTES,
+  NAVBAR_PUBLIC_ROUTES,
+} from "@/constants/link-constants";
 import { tokenApi } from "@/lib/api";
 import { useAuthStore } from "@/stores/auth-store";
 import type { UserType } from "@/types/api-types";
 import { useEffect } from "react";
-import { NavLink } from "react-router-dom";
+import { useLocation } from "react-router-dom";
+import CustomNavlink from "./custom-navlink";
 
 const getUserInfo = async (accessToken: string) => {
   try {
@@ -20,6 +25,7 @@ const Navbar = () => {
   const accessToken = useAuthStore((state) => state.accessToken);
   const setUser = useAuthStore((state) => state.setUser);
   const userInfo = useAuthStore((state) => state.userInfo);
+  const activeRoute = useLocation().pathname;
 
   useEffect(() => {
     const initUser = async () => {
@@ -31,38 +37,40 @@ const Navbar = () => {
     initUser();
   }, [accessToken]);
 
+  const isLoggedIn = !!userInfo;
+
   return (
     <div className="absolute top-0 inset-x-0 bg-gray-500/10 w-full h-16 px-10 py-3 flex items-center">
-      <NavLink
-        to="/"
-        className="text-white bg-orange-400/20 inline-flex p-2 rounded-lg hover:cursor-pointer hover:bg-orange-400/30 transition font-medium mr-4"
-      >
-        Home
-      </NavLink>
-      {userInfo ? (
+      {isLoggedIn ? (
         <div className="flex items-center gap-4">
           <p>Hello {userInfo.username}</p>
-          <NavLink
-            to="/signed-in"
-            className="text-white bg-orange-400/20 inline-flex p-2 rounded-lg hover:cursor-pointer hover:bg-orange-400/30 transition font-medium"
-          >
-            Own Notes
-          </NavLink>
-          <NavLink
-            to="/logout"
-            className="text-white bg-orange-400/20 inline-flex p-2 rounded-lg hover:cursor-pointer hover:bg-orange-400/30 transition font-medium"
-          >
-            Logout
-          </NavLink>
+          {NAVBAR_PROTECTED_ROUTES.map((route) => (
+            <CustomNavlink
+              key={`navbar-route-${route.content}`}
+              activeRoute={activeRoute}
+              content={route.content}
+              to={route.route}
+            />
+          ))}
         </div>
       ) : (
-        <NavLink
-          to="/login"
-          className="text-white bg-orange-400/20 inline-flex p-2 rounded-lg hover:cursor-pointer hover:bg-orange-400/30 transition font-medium"
-        >
-          Login
-        </NavLink>
+        <>
+          {NAVBAR_PUBLIC_ROUTES.map((route) => (
+            <CustomNavlink
+              key={`navbar-route-${route.content}`}
+              activeRoute={activeRoute}
+              content={route.content}
+              to={route.route}
+            />
+          ))}
+        </>
       )}
+      <CustomNavlink
+        activeRoute={activeRoute}
+        content="Home"
+        to="/"
+        className="ml-auto"
+      />
     </div>
   );
 };

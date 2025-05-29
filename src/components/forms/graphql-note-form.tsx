@@ -2,9 +2,10 @@ import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import "@/styles/Form.css";
-import { tokenApi } from "@/lib/api";
+import { graphQLTokenApi } from "@/lib/api";
 import { useAuthStore } from "@/stores/auth-store";
 import { useQueryClient } from "@tanstack/react-query";
+import { CREATE_NOTE_MUTATION } from "@/constants/graphql/graphql-queries";
 
 const formSchema = z.object({
   title: z
@@ -17,7 +18,7 @@ const formSchema = z.object({
     .max(255, { message: "Content Field to large" }),
 });
 
-const NoteForm = () => {
+const GraphQLNoteForm = () => {
   const {
     register,
     handleSubmit,
@@ -38,7 +39,10 @@ const NoteForm = () => {
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
       if (!accessToken) return;
-      await tokenApi(accessToken).post("note/", values);
+      await graphQLTokenApi(accessToken).post("", {
+        query: CREATE_NOTE_MUTATION,
+        variables: values,
+      });
 
       queryClient.invalidateQueries({
         queryKey: ["users-notes"],
@@ -56,7 +60,7 @@ const NoteForm = () => {
 
   return (
     <div className="capitalize">
-      <h2 className="text-center mb-14 text-5xl">Create Note</h2>
+      <h2 className="text-center mb-14 text-5xl">Create Note with GraphQL</h2>
       <form
         onSubmit={handleSubmit(onSubmit)}
         className="flex flex-col gap-7 form-class"
@@ -89,4 +93,4 @@ const NoteForm = () => {
     </div>
   );
 };
-export default NoteForm;
+export default GraphQLNoteForm;

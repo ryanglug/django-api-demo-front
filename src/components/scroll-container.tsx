@@ -14,7 +14,9 @@ const ScrollContainer = ({
   const handleScroll = (event: React.UIEvent<HTMLDivElement, UIEvent>) => {
     const { scrollTop, scrollHeight, clientHeight } = event.currentTarget;
 
-    if (scrollHeight - scrollTop === clientHeight) {
+    const offset = 10;
+
+    if (scrollHeight - scrollTop - clientHeight <= offset) {
       if (shouldCallback) callback();
     }
   };

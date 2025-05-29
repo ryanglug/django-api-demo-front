@@ -1,8 +1,11 @@
 import { graphQLTokenApi } from "@/lib/api";
 import type { NoteTypeQL } from "@/types/api-types";
-import { useInfiniteQuery } from "@tanstack/react-query";
+import { useInfiniteQuery, useQueryClient } from "@tanstack/react-query";
 import ScrollContainer from "./scroll-container";
-import { GET_USERS_NOTES_QUERY } from "@/constants/graphql/graphql-no-auth";
+import {
+  DELETE_NOTE_MUTATION,
+  GET_USERS_NOTES_QUERY,
+} from "@/constants/graphql/graphql-queries";
 import NoteQL from "./note-ql";
 import { useAuthStore } from "@/stores/auth-store";
 
@@ -13,8 +16,8 @@ const getNotes = async (accessToken: string, { pageParam = 1 }) => {
       variables: { page: pageParam },
     });
 
-    const data = res.data.data.userNotes;
-    const hasNext = data?.length === 5;
+    const data = res.data.data.userNotes.notes;
+    const hasNext = res.data.data.userNotes.hasNext;
 
     return {
       results: data as NoteTypeQL[],
@@ -44,14 +47,36 @@ const DjangoAuthGraphQL = () => {
     getNextPageParam: (lastPage) => lastPage.nextPage,
   });
 
+  const queryClient = useQueryClient();
+
+  const handleDelete = async (id: string) => {
+    try {
+      if (!accessToken) return;
+      await graphQLTokenApi(accessToken).post("", {
+        query: DELETE_NOTE_MUTATION,
+        variables: { id },
+      });
+
+      queryClient.invalidateQueries({
+        queryKey: ["users-notes"],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ["auth-graphql-notes"],
+      });
+      alert("Deleted Note");
+    } catch (error) {
+      console.error(error);
+      alert("Failed to delete note");
+    }
+  };
+
   if (isLoading) return <div className="text-5xl">Loading...</div>;
   if (error) return <div className="text-5xl">{error.message}</div>;
 
   return (
     <div className="flex flex-col gap-4">
-      <h2>Paginated Notes from GraphQL:</h2>
       <ScrollContainer
-        className="flex flex-col gap-5 items-center h-[400px] overflow-y-scroll pr-10"
+        className="flex flex-col gap-5 items-center h-[500px] overflow-y-scroll pr-5"
         callback={fetchNextPage}
         shouldCallback={!isFetchingNextPage && hasNextPage}
       >
@@ -61,8 +86,8 @@ const DjangoAuthGraphQL = () => {
               <NoteQL
                 key={`note-result-${i}`}
                 note={note}
-                canDelete
-                handleDelete={() => {}}
+                isAuth
+                handleDelete={handleDelete}
               />
             ))
           )}

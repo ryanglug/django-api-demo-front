@@ -30,6 +30,10 @@ const GoogleLoginButton = () => {
       <GoogleLogin
         onSuccess={handleSuccess}
         onError={() => alert("Login failed")}
+        shape="rectangular"
+        size="large"
+        theme="outline"
+        width={200}
       />
     </GoogleOAuthProvider>
   );
