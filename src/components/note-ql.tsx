@@ -4,7 +4,7 @@ import type { NoteTypeQL } from "@/types/api-types";
 interface Props {
   note: NoteTypeQL;
   isAuth?: boolean;
-  handleDelete?: (id: string) => void;
+  handleDelete?: (id: number) => void;
 }
 
 const NoteQL = ({ note, isAuth = false, handleDelete }: Props) => {

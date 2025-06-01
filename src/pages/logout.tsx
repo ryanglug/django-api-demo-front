@@ -15,7 +15,7 @@ const Logout = () => {
       }
     };
     logout();
-  }, []);
+  }, [logoutUser]);
 
   return null;
 };

@@ -22,7 +22,11 @@ const ScrollContainer = ({
   };
 
   return (
-    <div className={className} onScroll={handleScroll}>
+    <div
+      className={className}
+      onScroll={handleScroll}
+      data-testid="scroll-container"
+    >
       {children}
     </div>
   );

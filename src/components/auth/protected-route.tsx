@@ -16,49 +16,48 @@ const ProtectedRoute = ({ children }: Props) => {
   );
 
   useEffect(() => {
-    authenticate();
-  }, [accessToken]);
+    const refreshToken = async () => {
+      try {
+        const res = await authApi.post("refresh/");
 
-  const refreshToken = async () => {
-    try {
-      const res = await authApi.post("refresh/");
+        const token = res.data.access;
 
-      const token = res.data.access;
-
-      if (!token) {
+        if (!token) {
+          setAuthenticated(false);
+        } else {
+          refreshUser(token);
+          setAuthenticated(true);
+        }
+      } catch (error) {
+        console.error(error);
         setAuthenticated(false);
-      } else {
-        refreshUser(token);
-        setAuthenticated(true);
       }
-    } catch (error) {
-      console.error(error);
-      setAuthenticated(false);
-    }
-  };
+    };
 
-  const authenticate = async () => {
-    if (!accessToken) {
-      refreshToken();
-      return;
-    }
-    //Check if the token has expired
-    const decoded = jwtDecode(accessToken);
+    const authenticate = async () => {
+      if (!accessToken) {
+        refreshToken();
+        return;
+      }
+      //Check if the token has expired
+      const decoded = jwtDecode(accessToken);
 
-    if (!decoded.exp) {
-      refreshToken();
-      return;
-    }
+      if (!decoded.exp) {
+        refreshToken();
+        return;
+      }
 
-    const isExpired = decoded.exp * 1000 < Date.now();
+      const isExpired = decoded.exp * 1000 < Date.now();
 
-    //If has expired refresh the token
-    if (isExpired) {
-      refreshToken();
-      return;
-    }
-    setAuthenticated(true);
-  };
+      //If has expired refresh the token
+      if (isExpired) {
+        refreshToken();
+        return;
+      }
+      setAuthenticated(true);
+    };
+    authenticate();
+  }, [accessToken, refreshUser]);
 
   if (authenticated === undefined) return <p>Loading...</p>;
   if (!authenticated) return <Navigate to="/login" />;

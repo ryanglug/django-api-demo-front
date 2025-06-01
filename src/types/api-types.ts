@@ -1,23 +1,21 @@
 export interface UserType {
-  id: string;
+  id: number;
   username: string;
 }
 
 export interface NoteType {
-  id: string;
+  id: number;
   title: string;
   content: string;
   author: UserType;
 
   created_at: string;
-  updated_at: string;
 }
 export interface NoteTypeQL {
-  id: string;
+  id: number;
   title: string;
   content: string;
   author: UserType;
 
   createdAt: string;
-  updatedAt: string;
 }

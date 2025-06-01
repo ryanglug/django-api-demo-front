@@ -49,12 +49,12 @@ const DjangoAuthGraphQL = () => {
 
   const queryClient = useQueryClient();
 
-  const handleDelete = async (id: string) => {
+  const handleDelete = async (id: number) => {
     try {
       if (!accessToken) return;
       await graphQLTokenApi(accessToken).post("", {
         query: DELETE_NOTE_MUTATION,
-        variables: { id },
+        variables: { noteId: id },
       });
 
       queryClient.invalidateQueries({

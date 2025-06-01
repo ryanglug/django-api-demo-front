@@ -48,8 +48,8 @@ mutation CreateNote($title: String!, $content: String!){
 `;
 
 export const DELETE_NOTE_MUTATION = `
-mutation CreateNote($id: ID!){
-  deleteNote(id: $id) {
+mutation DeleteNote($noteId: ID!){
+  deleteNote(noteId: $noteId) {
     success
   }
 }

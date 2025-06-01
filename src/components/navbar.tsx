@@ -8,6 +8,7 @@ import type { UserType } from "@/types/api-types";
 import { useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import CustomNavlink from "./custom-navlink";
+import GithubImage from "@/assets/images/github.svg";
 
 const getUserInfo = async (accessToken: string) => {
   try {
@@ -35,15 +36,17 @@ const Navbar = () => {
     };
 
     initUser();
-  }, [accessToken]);
+  }, [accessToken, setUser]);
 
   const isLoggedIn = !!userInfo;
 
   return (
-    <div className="absolute top-0 inset-x-0 bg-gray-500/10 w-full h-16 px-10 py-3 flex items-center">
+    <div className="absolute top-0 inset-x-0 bg-gray-500/10 w-full h-16 px-10 py-3 flex items-center justify-between">
       {isLoggedIn ? (
         <div className="flex items-center gap-4">
-          <p>Hello {userInfo.username}</p>
+          <p>
+            Hello <span data-testid="user-span">{userInfo.username}</span>
+          </p>
           {NAVBAR_PROTECTED_ROUTES.map((route) => (
             <CustomNavlink
               key={`navbar-route-${route.content}`}
@@ -65,12 +68,16 @@ const Navbar = () => {
           ))}
         </>
       )}
-      <CustomNavlink
-        activeRoute={activeRoute}
-        content="Home"
-        to="/"
-        className="ml-auto"
-      />
+      <div className="flex items-center gap-5">
+        <a
+          href="https://github.com/glugnoob/django-api-demo"
+          className="hover:brightness-90 transition"
+          target="_blank"
+        >
+          <img src={GithubImage} className="size-16" />
+        </a>
+        <CustomNavlink activeRoute={activeRoute} content="Home" to="/" />
+      </div>
     </div>
   );
 };

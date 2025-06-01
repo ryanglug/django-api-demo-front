@@ -25,4 +25,10 @@ export default tseslint.config(
       ],
     },
   },
+  {
+    files: ["src/tests/**"],
+    rules: {
+      "@typescript-eslint/no-explicit-any": "off",
+    }
+  }
 )

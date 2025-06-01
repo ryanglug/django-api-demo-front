@@ -41,7 +41,7 @@ const DjangoAuth = () => {
 
   const queryClient = useQueryClient();
 
-  const deleteNote = async (id: string) => {
+  const deleteNote = async (id: number) => {
     if (!accessToken) return;
     try {
       await tokenApi(accessToken).delete(`note/delete/${id}/`);
@@ -60,7 +60,12 @@ const DjangoAuth = () => {
   };
 
   if (isLoading) return <div className="text-5xl">Loading...</div>;
-  if (error) return <div className="text-5xl">{error.message}</div>;
+  if (error)
+    return (
+      <div className="text-5xl" data-testid="error-message">
+        {error.message}
+      </div>
+    );
 
   return (
     <div className="flex flex-col gap-4">
