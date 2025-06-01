@@ -1,2 +1,2 @@
 Django Backend is here:
-https://github.com/glugnoob/django-api-demo-backend
+https://github.com/ryanglug/django-api-demo-backend
